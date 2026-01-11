@@ -329,11 +329,12 @@ def show_guide():
 
 def show_pvr_setup_menu():
     """Show PVR setup menu with options"""
-    from pvr_helper import (
-        is_pvr_installed, is_pvr_enabled, 
-        show_pvr_setup_wizard, show_pvr_status,
-        generate_manual_instructions, open_live_tv, open_tv_guide
-    )
+    try:
+        from pvr_helper import is_pvr_installed, is_pvr_enabled
+    except:
+        log('Failed to import pvr_helper', xbmc.LOGERROR)
+        notify('PVR helper not available', 'Error', xbmcgui.NOTIFICATION_ERROR)
+        return
     
     items = [
         ('[B]Setup Wizard (Automatic)[/B]', 'pvr_wizard', 'DefaultAddonService.png'),
@@ -342,11 +343,14 @@ def show_pvr_setup_menu():
     ]
     
     # Add Live TV options if PVR is set up
-    if is_pvr_installed() and is_pvr_enabled():
-        items.extend([
-            ('Open Live TV', 'open_live_tv', 'DefaultTVShows.png'),
-            ('Open TV Guide', 'open_tv_guide', 'DefaultTVGuide.png'),
-        ])
+    try:
+        if is_pvr_installed() and is_pvr_enabled():
+            items.extend([
+                ('Open Live TV', 'open_live_tv', 'DefaultTVShows.png'),
+                ('Open TV Guide', 'open_tv_guide', 'DefaultTVGuide.png'),
+            ])
+    except:
+        pass
     
     for title, action, icon in items:
         li = xbmcgui.ListItem(title)
@@ -361,33 +365,51 @@ def show_pvr_setup_menu():
 
 def run_pvr_wizard():
     """Run the automatic PVR setup wizard"""
-    from pvr_helper import show_pvr_setup_wizard
-    show_pvr_setup_wizard()
+    try:
+        from pvr_helper import show_pvr_setup_wizard
+        show_pvr_setup_wizard()
+    except Exception as e:
+        log('PVR wizard error: {}'.format(str(e)), xbmc.LOGERROR)
+        xbmcgui.Dialog().ok('Error', 'Failed to start PVR wizard: {}'.format(str(e)))
 
 
 def show_pvr_status_info():
     """Show PVR status information"""
-    from pvr_helper import show_pvr_status
-    show_pvr_status()
+    try:
+        from pvr_helper import show_pvr_status
+        show_pvr_status()
+    except Exception as e:
+        log('PVR status error: {}'.format(str(e)), xbmc.LOGERROR)
+        xbmcgui.Dialog().ok('Error', 'Failed to show PVR status: {}'.format(str(e)))
 
 
 def show_manual_setup():
     """Show manual setup instructions"""
-    from pvr_helper import generate_manual_instructions
-    instructions = generate_manual_instructions()
-    xbmcgui.Dialog().textviewer('Manual PVR Setup', instructions)
+    try:
+        from pvr_helper import generate_manual_instructions
+        instructions = generate_manual_instructions()
+        xbmcgui.Dialog().textviewer('Manual PVR Setup', instructions)
+    except Exception as e:
+        log('Manual setup error: {}'.format(str(e)), xbmc.LOGERROR)
+        xbmcgui.Dialog().ok('Error', 'Failed to show manual setup: {}'.format(str(e)))
 
 
 def open_live_tv_window():
     """Open Live TV window"""
-    from pvr_helper import open_live_tv
-    open_live_tv()
+    try:
+        from pvr_helper import open_live_tv
+        open_live_tv()
+    except Exception as e:
+        log('Open Live TV error: {}'.format(str(e)), xbmc.LOGERROR)
 
 
 def open_tv_guide_window():
     """Open TV Guide window"""
-    from pvr_helper import open_tv_guide
-    open_tv_guide()
+    try:
+        from pvr_helper import open_tv_guide
+        open_tv_guide()
+    except Exception as e:
+        log('Open TV Guide error: {}'.format(str(e)), xbmc.LOGERROR)
 
 
 def play_channel(slug):
@@ -426,49 +448,53 @@ def play_channel(slug):
 
 
 def show_server_status():
-    from webserver import is_running
-    
-    enable_server = get_setting('enable_server') == 'true'
-    port = get_setting('server_port') or '8183'
-    
-    # Get local IP
-    import socket
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('8.8.8.8', 80))
-        local_ip = s.getsockname()[0]
-        s.close()
-    except:
-        local_ip = '127.0.0.1'
-    
-    if not enable_server:
-        text = '[B]Built-in Web Server: DISABLED[/B]\n\n'
-        text += 'Enable it in Settings to use Frndly TV with external IPTV clients like:\n'
-        text += '- TiviMate\n'
-        text += '- Channels DVR\n'
-        text += '- Perfect Player\n'
-        text += '- Any M3U compatible player\n\n'
-        text += 'The server provides:\n'
-        text += '- M3U Playlist for channel list\n'
-        text += '- XMLTV EPG with full program info\n'
-        text += '- Direct stream access'
-    elif is_running():
-        text = '[B]Built-in Web Server: RUNNING[/B]\n\n'
-        text += 'Server Address: {}:{}\n\n'.format(local_ip, port)
-        text += '[B]URLs for IPTV Clients:[/B]\n\n'
-        text += 'Status Page:\nhttp://{}:{}/\n\n'.format(local_ip, port)
-        text += 'Playlist (with Gracenote EPG):\nhttp://{}:{}/playlist.m3u8?gracenote=include\n\n'.format(local_ip, port)
-        text += 'Playlist (with built-in EPG):\nhttp://{}:{}/playlist.m3u8?gracenote=exclude\n\n'.format(local_ip, port)
-        text += 'EPG/XMLTV:\nhttp://{}:{}/epg.xml\n\n'.format(local_ip, port)
-        text += '[B]For Channels DVR:[/B]\n'
-        text += 'Stream Format: HLS\n'
-        text += 'Source: http://{}:{}/playlist.m3u8?gracenote=include'.format(local_ip, port)
-    else:
-        text = '[B]Built-in Web Server: NOT RUNNING[/B]\n\n'
-        text += 'Server is enabled but not currently running.\n'
-        text += 'Please restart the addon or Kodi.'
-    
-    xbmcgui.Dialog().textviewer('Frndly TV Server Status', text)
+        from webserver import is_running
+        
+        enable_server = get_setting('enable_server') == 'true'
+        port = get_setting('server_port') or '8183'
+        
+        # Get local IP
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(('8.8.8.8', 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+        except:
+            local_ip = '127.0.0.1'
+        
+        if not enable_server:
+            text = '[B]Built-in Web Server: DISABLED[/B]\n\n'
+            text += 'Enable it in Settings to use Frndly TV with external IPTV clients like:\n'
+            text += '- TiviMate\n'
+            text += '- Channels DVR\n'
+            text += '- Perfect Player\n'
+            text += '- Any M3U compatible player\n\n'
+            text += 'The server provides:\n'
+            text += '- M3U Playlist for channel list\n'
+            text += '- XMLTV EPG with full program info\n'
+            text += '- Direct stream access'
+        elif is_running():
+            text = '[B]Built-in Web Server: RUNNING[/B]\n\n'
+            text += 'Server Address: {}:{}\n\n'.format(local_ip, port)
+            text += '[B]URLs for IPTV Clients:[/B]\n\n'
+            text += 'Status Page:\nhttp://{}:{}/\n\n'.format(local_ip, port)
+            text += 'Playlist (with Gracenote EPG):\nhttp://{}:{}/playlist.m3u8?gracenote=include\n\n'.format(local_ip, port)
+            text += 'Playlist (with built-in EPG):\nhttp://{}:{}/playlist.m3u8?gracenote=exclude\n\n'.format(local_ip, port)
+            text += 'EPG/XMLTV:\nhttp://{}:{}/epg.xml\n\n'.format(local_ip, port)
+            text += '[B]For Channels DVR:[/B]\n'
+            text += 'Stream Format: HLS\n'
+            text += 'Source: http://{}:{}/playlist.m3u8?gracenote=include'.format(local_ip, port)
+        else:
+            text = '[B]Built-in Web Server: NOT RUNNING[/B]\n\n'
+            text += 'Server is enabled but not currently running.\n'
+            text += 'Please restart the addon or Kodi.'
+        
+        xbmcgui.Dialog().textviewer('Frndly TV Server Status', text)
+    except Exception as e:
+        log('Server status error: {}'.format(str(e)), xbmc.LOGERROR)
+        xbmcgui.Dialog().ok('Error', 'Failed to show server status: {}'.format(str(e)))
 
 
 def open_settings():
@@ -481,35 +507,39 @@ def router():
     
     log('Router: action={}, params={}'.format(action, params), xbmc.LOGDEBUG)
     
-    if not action:
-        main_menu()
-    elif action == 'channels':
-        list_channels()
-    elif action == 'guide':
-        show_guide()
-    elif action == 'pvr_setup':
-        show_pvr_setup_menu()
-    elif action == 'pvr_wizard':
-        run_pvr_wizard()
-    elif action == 'pvr_status':
-        show_pvr_status_info()
-    elif action == 'pvr_manual':
-        show_manual_setup()
-    elif action == 'open_live_tv':
-        open_live_tv_window()
-    elif action == 'open_tv_guide':
-        open_tv_guide_window()
-    elif action == 'play':
-        play_channel(params.get('slug', ''))
-    elif action == 'server_status':
-        show_server_status()
-    elif action == 'settings':
-        open_settings()
-    elif action == 'refresh':
-        xbmc.executebuiltin('Container.Refresh')
-    else:
-        log('Unknown action: {}'.format(action), xbmc.LOGWARNING)
-        main_menu()
+    try:
+        if not action:
+            main_menu()
+        elif action == 'channels':
+            list_channels()
+        elif action == 'guide':
+            show_guide()
+        elif action == 'pvr_setup':
+            show_pvr_setup_menu()
+        elif action == 'pvr_wizard':
+            run_pvr_wizard()
+        elif action == 'pvr_status':
+            show_pvr_status_info()
+        elif action == 'pvr_manual':
+            show_manual_setup()
+        elif action == 'open_live_tv':
+            open_live_tv_window()
+        elif action == 'open_tv_guide':
+            open_tv_guide_window()
+        elif action == 'play':
+            play_channel(params.get('slug', ''))
+        elif action == 'server_status':
+            show_server_status()
+        elif action == 'settings':
+            open_settings()
+        elif action == 'refresh':
+            xbmc.executebuiltin('Container.Refresh')
+        else:
+            log('Unknown action: {}'.format(action), xbmc.LOGWARNING)
+            main_menu()
+    except Exception as e:
+        log('Router error: {}'.format(str(e)), xbmc.LOGERROR)
+        xbmcgui.Dialog().ok('Error', 'An error occurred: {}'.format(str(e)))
 
 
 if __name__ == '__main__':
