@@ -15,7 +15,8 @@ from socketserver import ThreadingMixIn
 from urllib.parse import urlparse, parse_qsl
 from xml.sax.saxutils import escape
 
-from .frndly_api import get_api, FrndlyException, Program
+# Use absolute imports instead of relative
+from frndly_api import get_api, FrndlyException, Program
 
 # Server instance
 _server = None
