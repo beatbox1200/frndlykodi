@@ -123,7 +123,7 @@ def main_menu():
     items = [
         ('Live Channels', 'channels', 'DefaultTVShows.png'),
         ('TV Guide', 'guide', 'DefaultTVGuide.png'),
-        ('DVR Recordings', 'dvr', 'DefaultVideo.png'),
+        ('Setup PVR/DVR', 'pvr_setup', 'DefaultAddonService.png'),
         ('Server Status', 'server_status', 'DefaultNetwork.png'),
         ('Settings', 'settings', 'DefaultAddonProgram.png'),
     ]
@@ -181,11 +181,9 @@ def list_channels():
                 next_progs.update(batch_next)
             except Exception as e:
                 log('Failed to get programs for batch: {}'.format(str(e)), xbmc.LOGWARNING)
-                # Continue with other batches even if one fails
                 continue
     except Exception as e:
         log('Error getting program info: {}'.format(str(e)), xbmc.LOGWARNING)
-        # Continue without program info
     
     dialog.close()
     
@@ -329,23 +327,67 @@ def show_guide():
     list_channels()
 
 
-def show_dvr():
-    li = xbmcgui.ListItem('[B]DVR Recording Information[/B]')
-    li.setInfo('video', {
-        'plot': 'DVR Recording requires Kodi PVR backend integration.\n\n'
-                'For full DVR functionality:\n'
-                '1. Enable the built-in web server in addon settings\n'
-                '2. Configure an IPTV PVR client (like PVR IPTV Simple Client)\n'
-                '3. Point it to the addon playlist and EPG URLs\n'
-                '4. Use Kodi native PVR recording features\n\n'
-                'The built-in server provides:\n'
-                '- M3U Playlist: http://YOUR_IP:8183/playlist.m3u8\n'
-                '- EPG/XMLTV: http://YOUR_IP:8183/epg.xml'
-    })
-    li.setArt({'icon': 'DefaultAddonInfo.png', 'fanart': ADDON_FANART})
-    xbmcplugin.addDirectoryItem(HANDLE, '', li, isFolder=False)
+def show_pvr_setup_menu():
+    """Show PVR setup menu with options"""
+    from pvr_helper import (
+        is_pvr_installed, is_pvr_enabled, 
+        show_pvr_setup_wizard, show_pvr_status,
+        generate_manual_instructions, open_live_tv, open_tv_guide
+    )
     
+    items = [
+        ('[B]Setup Wizard (Automatic)[/B]', 'pvr_wizard', 'DefaultAddonService.png'),
+        ('View PVR Status', 'pvr_status', 'DefaultAddonInfo.png'),
+        ('Manual Setup Instructions', 'pvr_manual', 'DefaultAddonHelp.png'),
+    ]
+    
+    # Add Live TV options if PVR is set up
+    if is_pvr_installed() and is_pvr_enabled():
+        items.extend([
+            ('Open Live TV', 'open_live_tv', 'DefaultTVShows.png'),
+            ('Open TV Guide', 'open_tv_guide', 'DefaultTVGuide.png'),
+        ])
+    
+    for title, action, icon in items:
+        li = xbmcgui.ListItem(title)
+        li.setArt({'icon': icon, 'thumb': icon, 'fanart': ADDON_FANART})
+        
+        url = build_url(action)
+        xbmcplugin.addDirectoryItem(HANDLE, url, li, isFolder=False)
+    
+    xbmcplugin.setContent(HANDLE, 'files')
     xbmcplugin.endOfDirectory(HANDLE)
+
+
+def run_pvr_wizard():
+    """Run the automatic PVR setup wizard"""
+    from pvr_helper import show_pvr_setup_wizard
+    show_pvr_setup_wizard()
+
+
+def show_pvr_status_info():
+    """Show PVR status information"""
+    from pvr_helper import show_pvr_status
+    show_pvr_status()
+
+
+def show_manual_setup():
+    """Show manual setup instructions"""
+    from pvr_helper import generate_manual_instructions
+    instructions = generate_manual_instructions()
+    xbmcgui.Dialog().textviewer('Manual PVR Setup', instructions)
+
+
+def open_live_tv_window():
+    """Open Live TV window"""
+    from pvr_helper import open_live_tv
+    open_live_tv()
+
+
+def open_tv_guide_window():
+    """Open TV Guide window"""
+    from pvr_helper import open_tv_guide
+    open_tv_guide()
 
 
 def play_channel(slug):
@@ -445,8 +487,18 @@ def router():
         list_channels()
     elif action == 'guide':
         show_guide()
-    elif action == 'dvr':
-        show_dvr()
+    elif action == 'pvr_setup':
+        show_pvr_setup_menu()
+    elif action == 'pvr_wizard':
+        run_pvr_wizard()
+    elif action == 'pvr_status':
+        show_pvr_status_info()
+    elif action == 'pvr_manual':
+        show_manual_setup()
+    elif action == 'open_live_tv':
+        open_live_tv_window()
+    elif action == 'open_tv_guide':
+        open_tv_guide_window()
     elif action == 'play':
         play_channel(params.get('slug', ''))
     elif action == 'server_status':
@@ -455,8 +507,6 @@ def router():
         open_settings()
     elif action == 'refresh':
         xbmc.executebuiltin('Container.Refresh')
-    elif action in ('dvr_scheduled', 'dvr_rules', 'dvr_settings', 'record'):
-        notify('DVR feature requires PVR backend setup. See DVR menu for details.', 'DVR Info')
     else:
         log('Unknown action: {}'.format(action), xbmc.LOGWARNING)
         main_menu()
