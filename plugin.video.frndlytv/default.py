@@ -150,20 +150,44 @@ def list_channels():
     try:
         channels = api.channels()
         live_map = api.live_map()
-        
-        # Get current programs
-        channel_ids = [str(ch['id']) for ch in channels]
-        current_progs, next_progs = api.get_current_programs(channel_ids)
     except FrndlyException as e:
         dialog.close()
         notify(str(e), 'Error', xbmcgui.NOTIFICATION_ERROR)
         return
     
-    dialog.close()
-    
     if not channels:
+        dialog.close()
         notify('No channels available. Check your subscription.', 'No Channels', xbmcgui.NOTIFICATION_WARNING)
         return
+    
+    # Get current programs in smaller batches to avoid exceeding limits
+    current_progs = {}
+    next_progs = {}
+    
+    try:
+        dialog.update(50, 'Loading program info...')
+        channel_ids = [str(ch['id']) for ch in channels]
+        
+        # Process in batches of 10 channels to avoid API limits
+        batch_size = 10
+        for i in range(0, len(channel_ids), batch_size):
+            if dialog.iscanceled():
+                break
+            
+            batch = channel_ids[i:i + batch_size]
+            try:
+                batch_current, batch_next = api.get_current_programs(batch)
+                current_progs.update(batch_current)
+                next_progs.update(batch_next)
+            except Exception as e:
+                log('Failed to get programs for batch: {}'.format(str(e)), xbmc.LOGWARNING)
+                # Continue with other batches even if one fails
+                continue
+    except Exception as e:
+        log('Error getting program info: {}'.format(str(e)), xbmc.LOGWARNING)
+        # Continue without program info
+    
+    dialog.close()
     
     for channel in channels:
         channel_id = str(channel['id'])
