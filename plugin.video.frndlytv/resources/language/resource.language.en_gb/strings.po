@@ -1,0 +1,217 @@
+# Kodi Media Center language file
+# Addon Name: Frndly TV
+# Addon id: plugin.video.frndlytv
+# Addon Provider: FrndlyTV Community
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin.video.frndlytv\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Settings Categories
+msgctxt "#30001"
+msgid "Account"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Login Credentials"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Email / Username"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Playback Settings"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Stream Quality"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Auto (Best)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "720p HD"
+msgstr ""
+
+msgctxt "#30015"
+msgid "480p SD"
+msgstr ""
+
+msgctxt "#30016"
+msgid "360p Low"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Use InputStream Adaptive"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Web Server"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Built-in Server Settings"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Enable Built-in Web Server"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Server Port"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Advanced Settings"
+msgstr ""
+
+msgctxt "#30032"
+msgid "EPG Days to Load"
+msgstr ""
+
+msgctxt "#30033"
+msgid "{0} days"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Keep Alive Interval (minutes)"
+msgstr ""
+
+msgctxt "#30035"
+msgid "{0} minutes"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Debug Logging"
+msgstr ""
+
+# Menu Items
+msgctxt "#30100"
+msgid "Live Channels"
+msgstr ""
+
+msgctxt "#30101"
+msgid "TV Guide"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Settings"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Server Status"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Refresh Channels"
+msgstr ""
+
+# Messages
+msgctxt "#30200"
+msgid "Login Required"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Please configure your Frndly TV credentials in settings"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Login Successful"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Login Failed"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Loading Channels..."
+msgstr ""
+
+msgctxt "#30205"
+msgid "No Channels Found"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Check your subscription and location"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Stream Error"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Unable to play stream"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Server Started"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Server Stopped"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Server Running on Port"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Playlist URL"
+msgstr ""
+
+msgctxt "#30213"
+msgid "EPG URL"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Session Expired"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Logging in..."
+msgstr ""
+
+msgctxt "#30216"
+msgid "Now Playing"
+msgstr ""
+
+# Context Menu
+msgctxt "#30300"
+msgid "Play Channel"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Add to Favorites"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Remove from Favorites"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Channel Info"
+msgstr ""

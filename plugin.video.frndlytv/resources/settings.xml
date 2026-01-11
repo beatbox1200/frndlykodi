@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+	<setting label="Email / Username" type="text" id="username" default=""/>
+	<setting label="Password" type="text" id="password" option="hidden" default=""/>
+	<setting label="Use InputStream Adaptive" type="bool" id="use_inputstream" default="true"/>
+	<setting label="Enable Web Server" type="bool" id="enable_server" default="false"/>
+	<setting label="Server Port" type="number" id="server_port" default="8183"/>
+	<setting label="EPG Days (1-7)" type="number" id="epg_days" default="3"/>
+	<setting label="Keep Alive Minutes" type="number" id="keep_alive_mins" default="30"/>
+	<setting label="Debug Logging" type="bool" id="debug" default="false"/>
+</settings>

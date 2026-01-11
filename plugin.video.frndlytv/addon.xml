@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.frndlytv" name="Frndly TV" version="1.0.0" provider-name="Marcus Montgomery / BeatTLF Entertainment">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="inputstream.adaptive" version="2.0.0" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.service" library="service.py" start="startup"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Frndly TV - Live TV Streaming for Kodi</summary>
+        <description lang="en">Frndly TV for Kodi - The Ultimate Live TV Streaming Add-on
+
+WHAT IS THIS ADD-ON?
+Frndly TV for Kodi is a video add-on that allows you to stream live television channels directly from your Frndly TV subscription within Kodi. This add-on eliminates the need for Docker containers, external servers, or additional hardware - everything runs directly on your device.
+
+FEATURES:
+• Live TV Streaming - Watch all your Frndly TV channels in real-time
+• Full EPG Support - Electronic Program Guide with show titles, descriptions, episode info, thumbnails, and TV parental ratings (TV-Y, TV-G, TV-PG, TV-14, TV-MA)
+• Channel Logos &amp; Numbers - Professional channel presentation with official logos
+• PVR/DVR Integration - Record your favorite shows with full metadata support
+• Built-in Web Server - Optional server for IPTV client integration (TiviMate, Channels DVR, etc.)
+• Fire TV &amp; Android TV Compatible - Works on Fire Stick, Android TV boxes, and all Kodi devices
+• Self-Contained - No external server or computer required
+
+REQUIREMENTS:
+• Kodi 19 (Matrix) or later
+• Active Frndly TV subscription
+• Internet connection
+
+CREATED BY:
+Marcus Montgomery / BeatTLF Entertainment
+
+BASED ON:
+frndlytv-for-channels by Matt Huisman (https://github.com/matthuisman/frndlytv-for-channels)
+
+DISCLAIMER:
+This add-on is not affiliated with or endorsed by Frndly TV. You must have a valid Frndly TV subscription to use this add-on.</description>
+        <disclaimer lang="en">This add-on is not affiliated with Frndly TV. A valid subscription is required.</disclaimer>
+        <platform>all</platform>
+        <license>MIT</license>
+        <website>https://frndlytv.com</website>
+        <source>https://github.com/beattlf/frndlytv-kodi</source>
+        <news>
+v1.0.0 (January 2025)
+─────────────────────
+NEW FEATURES:
+• Initial public release
+• Direct Frndly TV API integration for live streaming
+• Full EPG with show info, ratings, thumbnails, and episode details
+• PVR/DVR recording support with metadata
+• Built-in web server for external IPTV clients
+• Fire TV and Android TV optimized
+• Channel logos and numbering system
+• TV Parental Guidelines ratings display (TV-Y, TV-G, TV-PG, TV-14, TV-MA)
+• Auto session management and keep-alive
+        </news>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
